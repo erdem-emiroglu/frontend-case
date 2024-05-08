@@ -1,9 +1,10 @@
-import type { Metadata } from "next";
-import {ApolloWrapper} from "@/providers/ApolloProvider";
+import type { Metadata } from 'next';
+
+import { ApolloWrapper } from '@/providers/ApolloProvider';
 
 export const metadata: Metadata = {
-  title: "Frontend Assessment",
-  description: "Frontend Assessment",
+  title: 'Frontend Assessment',
+  description: 'Frontend Assessment',
 };
 
 export default function RootLayout({
@@ -14,9 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ApolloWrapper>
-            {children}
-        </ApolloWrapper>
+        <ApolloWrapper>{children}</ApolloWrapper>
       </body>
     </html>
   );

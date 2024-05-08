@@ -1,79 +1,90 @@
-@import "../../../styles/variables.scss";
+@import '../../../styles/variables.scss';
 
 .container {
-    position: relative;
-    width: 25em;
-    min-height: 1.5em;
-    border: 2px solid $background-primary;
-    display: flex;
-    align-items: center;
-    gap: 0.5em;
-    padding: 0.5em;
-    border-radius: 1em;
-    outline: none;
+  position: relative;
+  width: 25em;
+  min-height: 1.5em;
+  border: 2px solid $background-primary;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.5em;
+  border-radius: 1em;
+  outline: none;
 }
 
 .value {
-    flex-grow: 1;
-    display: flex;
-    gap: 0.5em;
-    flex-wrap: wrap;
+  flex-grow: 1;
+  display: flex;
+  gap: 0.5em;
+  flex-wrap: wrap;
 }
 
 .clear-btn {
-    background: none;
-    color: $background-primary;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    padding: 0;
-    font-size: 1.25em;
+  background: none;
+  color: $background-primary;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 0;
+  font-size: 1.25em;
 
-    &:focus, &:hover {
-        color: #333;
-    }
+  &:focus,
+  &:hover {
+    color: #333;
+  }
 }
 
 .options {
-    position: absolute;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    display: none;
-    max-height: 15em;
-    overflow-y: auto;
-    border: 2px solid $background-primary;
-    border-radius: 1em;
-    width: 100%;
-    left: 0;
-    top: calc(100% + 0.25em);
-    background-color: white;
-    z-index: 100;
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: none;
+  max-height: 15em;
+  overflow-y: auto;
+  border: 2px solid $background-primary;
+  border-radius: 1em;
+  width: 100%;
+  left: 0;
+  top: calc(100% + 0.25em);
+  background-color: white;
+  z-index: 100;
 
-    &.show {
-        display: block;
-    }
+  &.show {
+    display: block;
+  }
 }
 
 .option {
-    padding: 0.25em 0.5em;
-    cursor: pointer;
-    border-bottom: 2px solid $background-primary;
+  padding: 0.25em 0.5em;
+  cursor: pointer;
+  border-bottom: 2px solid $background-primary;
 
-    &.highlighted {
-        background-color: $background-primary;
-        color: white;
-    }
+  &.highlighted {
+    background-color: $background-primary;
+    color: white;
+  }
+}
+
+.error {
+  border-color: red !important;
+  color: red !important;
+}
+
+.noOptions {
+  padding: 1em;
+  text-align: center;
 }
 
 .caret {
-    font-size: 1.25em;
-    color: $background-primary;
-    width: 1em;
-    height: 1em;
-    cursor: pointer;
+  font-size: 1.25em;
+  color: $background-primary;
+  width: 1em;
+  height: 1em;
+  cursor: pointer;
 
-    &.opened {
-        transform: rotate(180deg);
-    }
+  &.opened {
+    transform: rotate(180deg);
+  }
 }

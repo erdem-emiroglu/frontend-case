@@ -1,8 +1,14 @@
-import {NoDataProps} from "@/components/NoData/NoData.types";
-import styles from "@/components/NoData/NoData.module.scss";
+import clsx from 'clsx';
 
-const NoData = ({text = 'No data', variant = "md"}: NoDataProps) => {
-    return <div className={styles[`noData--${variant}`]} data-cy="no-data">{text}</div>;
-}
+import styles from '@/components/NoData/NoData.module.scss';
+import { NoDataProps } from '@/components/NoData/NoData.types';
+
+const NoData = ({ text = 'No data', variant = 'md', className }: NoDataProps) => {
+  return (
+    <div className={clsx(styles[`noData--${variant}`], className)} data-cy="no-data">
+      {text}
+    </div>
+  );
+};
 
 export default NoData;

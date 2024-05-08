@@ -1,22 +1,21 @@
-import {useMemo, useState} from "react";
-import _ from "lodash";
-import {SearchProps} from "@/components/Search/Search.types";
+import _ from 'lodash';
+import { useMemo, useState } from 'react';
 
-export const useSearch = ({onSearch}: SearchProps) => {
-    const [inputValue, setInputValue] = useState('');
+import { SearchProps } from '@/components/Search/Search.types';
 
-    const debouncedSearch = useMemo(() =>
-            _.debounce(onSearch, 300)
-        , [onSearch]);
+export const useSearch = ({ onSearch }: SearchProps) => {
+  const [inputValue, setInputValue] = useState('');
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const newValue = event.target.value;
-        setInputValue(newValue);
-        debouncedSearch(newValue);
-    };
+  const debouncedSearch = useMemo(() => _.debounce(onSearch, 300), [onSearch]);
 
-    return {
-        inputValue,
-        handleChange
-    }
-}
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.value;
+    setInputValue(newValue);
+    debouncedSearch(newValue);
+  };
+
+  return {
+    inputValue,
+    handleChange,
+  };
+};

@@ -1,21 +1,22 @@
-import {Meta, type StoryObj} from '@storybook/react';
-import NoData from './index';
+import { Meta, type StoryObj } from '@storybook/react';
+
+import NoData from '@/components/NoData';
 
 const meta = {
-    title: 'Components/NoData',
-    component: NoData,
-    args: {},
-    parameters: {
-        layout: 'centered',
-    },
-    tags: ['autodocs'],
+  title: 'Components/NoData',
+  component: NoData,
+  args: {},
+  parameters: {
+    layout: 'centered',
+  },
+  tags: ['autodocs'],
 } satisfies Meta<typeof NoData>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-    args: {
-        text: 'No data to display',
-    }
+  args: {
+    text: 'No data to display',
+  },
 };

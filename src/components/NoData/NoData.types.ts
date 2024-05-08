@@ -1,6 +1,7 @@
-import {Size} from "@/types/size";
+import { Size } from '@/types/size';
 
 export type NoDataProps = {
-    text?: string;
-    variant?: Size;
-}
+  text?: string;
+  variant?: Size;
+  className?: string;
+};

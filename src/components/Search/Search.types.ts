@@ -1,4 +1,4 @@
 export type SearchProps = {
-    onSearch: (value: string) => void;
-    withBorder?: boolean;
-}
+  onSearch: (value: string) => void;
+  withBorder?: boolean;
+};

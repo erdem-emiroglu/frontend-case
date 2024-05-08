@@ -15,7 +15,10 @@
     font-size: 1.4em;
   }
 
-  &--sm, &--md, &--lg, &--xl {
+  &--sm,
+  &--md,
+  &--lg,
+  &--xl {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -70,7 +73,10 @@
     border-top-color: #000;
   }
 
-  &--sm, &--md, &--lg, &--xl {
+  &--sm,
+  &--md,
+  &--lg,
+  &--xl {
     border-radius: 50%;
     animation: spin 1s linear infinite;
   }
