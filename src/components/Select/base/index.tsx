@@ -1,135 +1,30 @@
 "use client";
 
-import {ReactNode, useCallback, useEffect, useRef, useState} from "react"
-import {NestedPropertyPath} from "@/types/utility";
-import styles from "./select.module.scss"
+import styles from "./Select.module.scss"
 import Search from "@/components/Search";
 import Chip from "@/components/Chip";
-import {FaCaretDown, FaCaretUp} from "react-icons/fa";
+import {FaCaretUp} from "@react-icons/all-files/fa/FaCaretUp";
 import clsx from "clsx";
 import _ from "lodash";
-import {Maybe} from "@/graphql/generated";
+import NoData from "@/components/NoData";
+import Loader from "@/components/Loader";
+import {SelectChildrenProps, SelectProps, SelectRequiredFields} from "@/components/Select/base/Select.types";
+import {useSelect} from "@/components/Select/base/Select.hook";
 
-type SelectRequiredFields = { id?: string | number | Maybe<string> };
-
-type MultipleSelectProps<T> = {
-    multiple: true
-    value: T[]
-    onChange: (value: T[]) => void
-}
-
-type SingleSelectProps<T> = {
-    multiple?: false
-    value?: T
-    onChange: (value: T | undefined) => void
-}
-
-type SelectChildrenProps<T> = {
-    option: Required<T>
-    search: string
-}
-
-type SelectProps<T> = {
-    options: T[]
-    loading?: boolean
-    children?: ({option, search}: SelectChildrenProps<T>) => ReactNode
-    accessor: NestedPropertyPath<T>;
-    onSearch?: (value: string) => void;
-} & (SingleSelectProps<T> | MultipleSelectProps<T>)
-
-export function Select<T extends SelectRequiredFields>({
-                                                           multiple,
-                                                           value,
-                                                           onChange,
-                                                           options,
-                                                           accessor,
-                                                           onSearch,
-                                                           loading,
-                                                           children
-                                                       }: SelectProps<T>) {
-    const [search, setSearch] = useState("");
-    const [isOpen, setIsOpen] = useState(false);
-    const [highlightedIndex, setHighlightedIndex] = useState(0);
-    const containerRef = useRef<HTMLDivElement>(null);
-
-    const selectOption = useCallback((option: T) => {
-        if (multiple) {
-            if (value.includes(option)) {
-                onChange(value.filter(o => o !== option))
-            } else {
-                onChange([...value, option])
-            }
-        } else {
-            if (option !== value) onChange(option)
-        }
-    }, [multiple, onChange, value])
-
-    const isOptionSelected = (option: T) => {
-        return multiple ? value.includes(option) : option === value
-    }
-
-    const handleSearch = (value: string) => {
-        setSearch(value);
-
-        _.debounce(() => {
-            if (onSearch) {
-                onSearch(search);
-                setIsOpen(true);
-                setHighlightedIndex(0);
-            }
-        }, 500)();
-    }
-
-    const onKeyDown = useCallback((e: KeyboardEvent) => {
-        if (e.target != containerRef.current) return
-        switch (e.code) {
-            case "Enter":
-            case "Space":
-                setIsOpen(prev => !prev)
-                if (isOpen) selectOption(options[highlightedIndex])
-                break
-            case "ArrowUp":
-            case "ArrowDown": {
-                if (!isOpen) {
-                    setIsOpen(true)
-                    break
-                }
-
-                const newValue = highlightedIndex + (e.code === "ArrowDown" ? 1 : -1)
-                if (newValue >= 0 && newValue < options.length) {
-                    setHighlightedIndex(newValue)
-                }
-
-                const list = containerRef.current?.querySelector("ul");
-                const highlighted = containerRef.current?.querySelector(`.${styles.highlighted}`) as HTMLElement;
-                if (list && highlighted) {
-                    list.scrollTop = highlighted.offsetTop - list.offsetTop
-                }
-                break
-            }
-            case "Escape":
-                setIsOpen(false)
-                break
-        }
-    }, [highlightedIndex, isOpen, options, selectOption])
-
-    useEffect(() => {
-        if (isOpen) setHighlightedIndex(0)
-    }, [isOpen])
-
-    useEffect(() => {
-        let containerRefValue = null;
-
-        if (containerRef.current) {
-            containerRefValue = containerRef.current;
-        }
-
-        containerRefValue?.addEventListener("keydown", onKeyDown)
-
-        return () => {
-            containerRefValue?.removeEventListener("keydown", onKeyDown)
-        }
-    }, [isOpen, options, selectOption, onKeyDown])
+function Select<T extends SelectRequiredFields>(props: SelectProps<T>) {
+    const {
+        search,
+        isOpen,
+        highlightedIndex,
+        containerRef,
+        optionsRef,
+        selectOption,
+        isOptionSelected,
+        handleSearch,
+        setIsOpen,
+        setHighlightedIndex,
+        handleScrollBottom
+    } = useSelect(props);
 
     return (
         <div
@@ -137,27 +32,43 @@ export function Select<T extends SelectRequiredFields>({
             onBlur={() => setIsOpen(false)}
             onClick={() => setIsOpen(prev => !prev)}
             tabIndex={0}
+            role="combobox"
+            aria-expanded={isOpen}
+            aria-controls="options"
+            aria-autocomplete="list"
+            aria-activedescendant={`option_${highlightedIndex + 1}`}
+            aria-labelledby="search"
             className={styles.container}
+            data-cy="select"
         >
             <div className={styles.value}>
-                {multiple ? value.map(v => (
+                {props.multiple ? props.value.map(v => (
                     <Chip
                         key={v.id}
-                        label={_.get(v, accessor)}
+                        text={_.get(v, props.accessor) as string}
                         onDelete={() => selectOption(v)}
                     />
-                )) : _.get(value, accessor)}
-                {onSearch && <Search value={search} onChange={handleSearch}/>}
+                )) : _.get(props.value, props.accessor) as string}
+                {!!props.onSearch && <Search onSearch={handleSearch}/>}
             </div>
-            {isOpen ? <FaCaretUp color="#475569" size={24}/> : <FaCaretDown color="#475569" size={24}/>}
-            <ul className={clsx(styles.options, {[styles.show]: isOpen})}>
-                {loading && <li>Loading...</li>}
-                {!loading && options?.map((option, index) => (
+            <div className={clsx(styles.caret, {
+                [styles.opened]: isOpen
+            })}>
+                <FaCaretUp/>
+            </div>
+            <ul id="options" className={clsx(styles.options, {[styles.show]: isOpen})} ref={optionsRef}
+                onScroll={handleScrollBottom} role="listbox" aria-label="Options" data-cy="options">
+                {props.loading ? (
+                    <Loader />
+                ) : (props.options?.length ? props.options.map((option, index) => (
                     <li
+                        id={`option_${index + 1}`}
                         onClick={e => {
                             e.stopPropagation()
                             selectOption(option)
-                            setIsOpen(false)
+                            if (!props.multiple) {
+                                setIsOpen(false);
+                            }
                         }}
                         onMouseEnter={() => setHighlightedIndex(index)}
                         key={option.id}
@@ -169,10 +80,15 @@ export function Select<T extends SelectRequiredFields>({
                             }
                         )}
                     >
-                        {(children && children({option, search} as SelectChildrenProps<T>)) || _.get(option, accessor)}
+                        {(props.children && props.children({
+                            option,
+                            search
+                        } as SelectChildrenProps<T>)) || _.get(option, props.accessor) as string}
                     </li>
-                ))}
+                )) : <NoData text="No data"/>)}
             </ul>
         </div>
     )
 }
+
+export default Select;

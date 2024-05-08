@@ -6,17 +6,17 @@ const meta = {
     title: 'Components/Chip',
     component: Chip,
     args: {
-        label: 'Example Chip',
+        text: 'Example Chip',
         onDelete: () => alert('Delete clicked!'),
     },
     argTypes: {
-        label: {control: 'text'},
+        text: {control: 'text'},
         onDelete: {action: 'deleted'},
     },
     parameters: {
         layout: 'centered',
-    },
-    tags: ['autodocs'],
+    }
+
 } satisfies Meta<typeof Chip>;
 
 export default meta;
@@ -24,14 +24,14 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
     args: {
-        label: 'Default Chip',
+        text: 'Default Chip',
         onDelete: fn(),
     }
 };
 
 export const WithDelete: Story = {
     args: {
-        label: 'Chip with delete',
+        text: 'Chip with delete',
         onDelete: () => alert('Delete clicked!'),
     }
 };

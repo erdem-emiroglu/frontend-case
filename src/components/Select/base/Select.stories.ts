@@ -44,25 +44,6 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const Template = args => {
-    const [value, setValue] = useState(args.value ?? '');
-    return (
-        <>
-            <Input
-                {...args}
-    onChange={(...params) => {
-        args.onChange(...params);
-        setValue(...params);
-    }}
-    value={value}
-    />
-    <pre style={{ marginTop: 10 }}>
-    {JSON.stringify({ value }, null, 2)}
-    </pre>
-    </>
-);
-};
-
 export const Default: Story = {
     args: {
         options,

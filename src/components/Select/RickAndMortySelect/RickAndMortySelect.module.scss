@@ -1,0 +1,23 @@
+.characterContainer {
+  display: flex;
+  gap: 0.25em;
+  user-select: none;
+
+  .characterImage {
+    border-radius: 0.5em;
+  }
+  .characterContent {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+
+    .characterName {
+
+    }
+
+    .characterEpisode {
+
+    }
+  }
+}

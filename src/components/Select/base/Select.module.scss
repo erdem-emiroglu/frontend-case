@@ -1,18 +1,16 @@
+@import "../../../styles/variables.scss";
+
 .container {
     position: relative;
-    width: 20em;
+    width: 25em;
     min-height: 1.5em;
-    border: 0.05em solid #777;
+    border: 2px solid $background-primary;
     display: flex;
     align-items: center;
     gap: 0.5em;
     padding: 0.5em;
     border-radius: 1em;
     outline: none;
-
-    &:focus {
-        border-color: hsl(200, 100%, 50%);
-    }
 }
 
 .value {
@@ -24,7 +22,7 @@
 
 .clear-btn {
     background: none;
-    color: #777;
+    color: $background-primary;
     border: none;
     outline: none;
     cursor: pointer;
@@ -44,7 +42,7 @@
     display: none;
     max-height: 15em;
     overflow-y: auto;
-    border: 0.05em solid #777;
+    border: 2px solid $background-primary;
     border-radius: 1em;
     width: 100%;
     left: 0;
@@ -60,39 +58,22 @@
 .option {
     padding: 0.25em 0.5em;
     cursor: pointer;
-
-    &.selected {
-        background-color: hsl(200, 100%, 70%);
-    }
+    border-bottom: 2px solid $background-primary;
 
     &.highlighted {
-        background-color: hsl(200, 100%, 50%);
+        background-color: $background-primary;
         color: white;
     }
 }
 
-.option-badge {
-    display: flex;
-    align-items: center;
-    border: 0.05em solid #777;
-    border-radius: 1em;
-    padding: 0.15em 0.25em;
-    gap: 0.25em;
+.caret {
+    font-size: 1.25em;
+    color: $background-primary;
+    width: 1em;
+    height: 1em;
     cursor: pointer;
-    background: none;
-    outline: none;
 
-    &:hover, &:focus {
-        background-color: hsl(0, 100%, 90%);
-        border-color: hsl(0, 100%, 50%);
-    }
-
-    & > .remove-btn {
-        font-size: 1.25em;
-        color: #777;
-
-        &:hover, &:focus {
-            color: hsl(0, 100%, 50%);
-        }
+    &.opened {
+        transform: rotate(180deg);
     }
 }
